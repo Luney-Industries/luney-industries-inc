@@ -206,20 +206,8 @@
     .hero-title .line1 { color: var(--white); display: block; }
     .hero-title .line2 {
       display: block;
-      -webkit-text-stroke: 2px var(--yellow);
+      -webkit-text-stroke: 2px var(--white);
       color: transparent;
-      position: relative;
-    }
-    .hero-title .line2::after {
-      content: attr(data-text);
-      position: absolute;
-      inset: 0;
-      color: var(--yellow);
-      clip-path: inset(0 100% 0 0);
-      animation: revealText 2s ease 1s forwards;
-    }
-    @keyframes revealText {
-      to { clip-path: inset(0 0% 0 0); }
     }
 
     .hero-subtitle {
@@ -1006,7 +994,7 @@
     <div class="hero-eyebrow">Est. Recently · Incorporated Somewhere · Disrupting Everything</div>
     <h1 class="hero-title glitch" data-text="LUNEY INDUSTRIES">
       <span class="line1">LUNEY</span>
-      <span class="line2" data-text="INDUSTRIES">INDUSTRIES</span>
+      <span class="line2">INDUSTRIES</span>
     </h1>
 
     <p class="hero-subtitle">

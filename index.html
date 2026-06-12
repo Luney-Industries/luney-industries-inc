@@ -11,16 +11,16 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --yellow: #FFE600;
-      --hot-pink: #FF2D78;
-      --electric-blue: #00D4FF;
-      --green: #00FF88;
-      --purple: #8B00FF;
-      --orange: #FF6B00;
-      --dark: #080810;
-      --darker: #04040A;
+      --yellow: #FFFFFF;
+      --hot-pink: #AAAAAA;
+      --electric-blue: #CCCCCC;
+      --green: #FFFFFF;
+      --purple: #555555;
+      --orange: #DDDDDD;
+      --dark: #111111;
+      --darker: #000000;
       --white: #FFFFFF;
-      --gray: #888;
+      --gray: #666666;
     }
 
     html { scroll-behavior: smooth; }
@@ -45,7 +45,7 @@
       transition: transform 0.1s, background 0.2s, width 0.2s, height 0.2s;
       mix-blend-mode: difference;
     }
-    .cursor.click { width: 40px; height: 40px; background: rgba(255,230,0,0.3); }
+    .cursor.click { width: 40px; height: 40px; background: rgba(255,255,255,0.3); }
 
     /* ===== NOISE OVERLAY ===== */
     body::before {
@@ -65,8 +65,8 @@
 
     /* ===== TICKER ===== */
     .ticker {
-      background: var(--yellow);
-      color: var(--dark);
+      background: var(--white);
+      color: var(--darker);
       font-weight: 900;
       font-size: 0.75rem;
       letter-spacing: 0.1em;
@@ -91,9 +91,9 @@
       position: sticky;
       top: 0;
       z-index: 1000;
-      background: rgba(4,4,10,0.85);
+      background: rgba(0,0,0,0.85);
       backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255,230,0,0.2);
+      border-bottom: 1px solid rgba(255,255,255,0.2);
       padding: 1rem 2rem;
       display: flex;
       align-items: center;
@@ -159,9 +159,9 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 80% 60% at 50% 50%, rgba(139,0,255,0.15) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(255,45,120,0.1) 0%, transparent 60%),
-        radial-gradient(ellipse 40% 40% at 80% 20%, rgba(0,212,255,0.1) 0%, transparent 60%);
+        radial-gradient(ellipse 80% 60% at 50% 50%, rgba(80,80,80,0.15) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(180,180,180,0.1) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 80% 20%, rgba(200,200,200,0.1) 0%, transparent 60%);
       animation: heroShift 8s ease-in-out infinite alternate;
     }
     @keyframes heroShift {
@@ -173,8 +173,8 @@
       position: absolute;
       inset: 0;
       background-image:
-        linear-gradient(rgba(255,230,0,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,230,0,0.03) 1px, transparent 1px);
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
       background-size: 60px 60px;
       animation: gridScroll 20s linear infinite;
     }
@@ -419,20 +419,20 @@
       height: 100%;
       border-radius: 50%;
       background: radial-gradient(circle at 35% 35%,
-        rgba(255,230,0,0.8),
-        rgba(255,45,120,0.6),
-        rgba(139,0,255,0.4),
+        rgba(255,255,255,0.8),
+        rgba(180,180,180,0.6),
+        rgba(80,80,80,0.4),
         transparent 70%);
       animation: orbPulse 4s ease-in-out infinite;
       box-shadow:
-        0 0 80px rgba(255,230,0,0.3),
-        0 0 160px rgba(255,45,120,0.2),
-        inset 0 0 80px rgba(139,0,255,0.3);
+        0 0 80px rgba(255,255,255,0.3),
+        0 0 160px rgba(180,180,180,0.2),
+        inset 0 0 80px rgba(80,80,80,0.3);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 8rem;
-      filter: drop-shadow(0 0 20px rgba(255,230,0,0.5));
+      filter: drop-shadow(0 0 20px rgba(255,255,255,0.5));
     }
     @keyframes orbPulse {
       0%, 100% { transform: scale(1) rotate(0deg); }
@@ -444,7 +444,7 @@
       position: absolute;
       inset: -20px;
       border-radius: 50%;
-      border: 1px solid rgba(255,230,0,0.2);
+      border: 1px solid rgba(255,255,255,0.2);
       animation: ringRotate 10s linear infinite;
     }
     .product-orb-ring::after {
@@ -466,7 +466,7 @@
       position: absolute;
       inset: -50px;
       border-radius: 50%;
-      border: 1px solid rgba(255,45,120,0.15);
+      border: 1px solid rgba(180,180,180,0.15);
       animation: ringRotate 15s linear infinite reverse;
     }
     .product-ring-2::after {
@@ -523,7 +523,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(255,230,0,0.05), transparent);
+      background: linear-gradient(135deg, rgba(255,255,255,0.05), transparent);
       opacity: 0;
       transition: opacity 0.3s;
     }
@@ -593,7 +593,7 @@
 
     /* ===== ABOUT SECTION ===== */
     .about-section {
-      background: linear-gradient(180deg, var(--darker) 0%, rgba(8,8,16,0.5) 100%);
+      background: linear-gradient(180deg, var(--darker) 0%, rgba(0,0,0,0.5) 100%);
     }
 
     .about-grid {
@@ -631,8 +631,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: radial-gradient(circle, rgba(255,230,0,0.2), rgba(139,0,255,0.2));
-      border: 2px solid rgba(255,230,0,0.3);
+      background: radial-gradient(circle, rgba(255,255,255,0.2), rgba(80,80,80,0.2));
+      border: 2px solid rgba(255,255,255,0.3);
     }
     .exec-name {
       font-weight: 900;
@@ -681,7 +681,7 @@
       top: 1rem; left: 1.5rem;
       font-size: 5rem;
       line-height: 1;
-      color: rgba(255,230,0,0.15);
+      color: rgba(255,255,255,0.15);
       font-family: Georgia, serif;
     }
     .press-quote {
@@ -762,7 +762,7 @@
       content: '';
       position: absolute;
       inset: -30px;
-      background: radial-gradient(ellipse, rgba(255,230,0,0.15), transparent 70%);
+      background: radial-gradient(ellipse, rgba(255,255,255,0.15), transparent 70%);
       z-index: -1;
       animation: ctaGlow 3s ease-in-out infinite alternate;
     }
@@ -778,7 +778,7 @@
       color: var(--yellow);
       display: block;
       margin-bottom: 1rem;
-      text-shadow: 0 0 60px rgba(255,230,0,0.4);
+      text-shadow: 0 0 60px rgba(255,255,255,0.4);
     }
 
     /* ===== FOOTER ===== */
@@ -1119,9 +1119,9 @@
     <div class="section-inner">
       <div class="product-hero" style="direction: rtl;">
         <div class="product-visual reveal" style="direction:ltr">
-          <div class="product-orb-ring" style="border-color: rgba(0,212,255,0.2)"></div>
-          <div class="product-ring-2" style="border-color: rgba(0,255,136,0.15)"></div>
-          <div class="product-orb" style="background: radial-gradient(circle at 35% 35%, rgba(0,212,255,0.8), rgba(0,255,136,0.6), rgba(139,0,255,0.4), transparent 70%); box-shadow: 0 0 80px rgba(0,212,255,0.3), 0 0 160px rgba(0,255,136,0.2), inset 0 0 80px rgba(139,0,255,0.3);">📷</div>
+          <div class="product-orb-ring" style="border-color: rgba(200,200,200,0.2)"></div>
+          <div class="product-ring-2" style="border-color: rgba(200,200,200,0.15)"></div>
+          <div class="product-orb" style="background: radial-gradient(circle at 35% 35%, rgba(200,200,200,0.8), rgba(200,200,200,0.6), rgba(80,80,80,0.4), transparent 70%); box-shadow: 0 0 80px rgba(200,200,200,0.3), 0 0 160px rgba(200,200,200,0.2), inset 0 0 80px rgba(80,80,80,0.3);">📷</div>
         </div>
         <div class="product-info" style="direction:ltr; text-align:right">
           <p class="product-tagline reveal">Product #2 of 2 · The Quiet One · The Other Thing</p>
@@ -1480,7 +1480,7 @@
 
     // ===== PARTICLES =====
     const particleContainer = document.getElementById('particles');
-    const colors = ['#FFE600', '#FF2D78', '#00D4FF', '#00FF88', '#8B00FF', '#FF6B00'];
+    const colors = ['var(--white)', 'var(--hot-pink)', 'var(--electric-blue)', 'var(--green)', 'var(--purple)', 'var(--orange)'];
     const emojis = ['💨', '✨', '⚡', '🔥', '💫'];
 
     function createParticle() {

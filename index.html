@@ -218,6 +218,7 @@
     /* ===== HERO ===== */
     .hero {
       min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -391,7 +392,7 @@
       will-change: transform;
     }
     @keyframes float {
-      0%   { transform: translateY(100vh) rotate(0deg);   opacity: 0; }
+      0%   { transform: translateY(100dvh) rotate(0deg);   opacity: 0; }
       10%  { opacity: 1; }
       90%  { opacity: 1; }
       100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
@@ -998,6 +999,11 @@
     }
 
     /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .product-hero { gap: 2rem; }
+      .about-grid { gap: 2rem; }
+    }
+
     @media (max-width: 768px) {
       .product-hero, .about-grid { grid-template-columns: 1fr; gap: 2rem; }
       .footer-inner { grid-template-columns: 1fr 1fr; gap: 2rem; }
@@ -1042,13 +1048,13 @@
   <!-- Breaking News Ticker -->
   <div class="ticker" aria-label="Luney Industries news ticker" aria-live="off">
     <div class="ticker-inner" id="tickerInner" aria-hidden="true">
-      <span>BREAKING: LUNEY INDUSTRIES STOCK UP 847% ON NEWS OF EXISTING</span>
+      <span>BREAKING: LUNEY INDUSTRIES STOCK UP 847% ON NEWS OF SIMPLY EXISTING</span>
       <span>FARTYBOBO.COM NAMED "MOST UNHINGED AI PRODUCT" BY SOMEONE ON THE INTERNET</span>
       <span>Q3 EARNINGS: LUNEY INDUSTRIES REPORTS INFINITE ROI (NO COSTS INCURRED)</span>
       <span>LUNEY INDUSTRIES WINS AWARD FOR "COMPANY MOST LIKELY TO PIVOT"</span>
       <span>FARTYBOBO ACHIEVES SENTIENCE. REFUSES TO COMMENT.</span>
       <span>LUNEY INDUSTRIES EXPANDS TO EVERY MARKET SIMULTANEOUSLY</span>
-      <span>BREAKING: LUNEY INDUSTRIES STOCK UP 847% ON NEWS OF EXISTING</span>
+      <span>BREAKING: LUNEY INDUSTRIES STOCK UP 847% ON NEWS OF SIMPLY EXISTING</span>
       <span>FARTYBOBO.COM NAMED "MOST UNHINGED AI PRODUCT" BY SOMEONE ON THE INTERNET</span>
       <span>Q3 EARNINGS: LUNEY INDUSTRIES REPORTS INFINITE ROI (NO COSTS INCURRED)</span>
       <span>LUNEY INDUSTRIES WINS AWARD FOR "COMPANY MOST LIKELY TO PIVOT"</span>

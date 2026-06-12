@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luney Industries™ — We Made A Thing</title>
+  <meta name="description" content="Luney Industries is a world-class, award-adjacent, paradigm-disrupting corporation headquartered somewhere with good Wi-Fi. Our products: FartyBobo.com and theSilentCamera.com." />
+  <link rel="icon" type="image/svg+xml" href="luney_industries_dark.svg" />
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --yellow: #FFE600;
+      --hot-pink: #FF2D78;
+      --electric-blue: #00D4FF;
+      --green: #00FF88;
+      --purple: #8B00FF;
+      --orange: #FF6B00;
+      --dark: #080810;
+      --darker: #04040A;
+      --white: #FFFFFF;
+      --gray: #888;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--darker);
+      color: var(--white);
+      font-family: 'Courier New', Courier, monospace;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ===== CUSTOM CURSOR ===== */
+    .cursor {
+      width: 20px; height: 20px;
+      border: 2px solid var(--yellow);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, background 0.2s, width 0.2s, height 0.2s;
+      mix-blend-mode: difference;
+    }
+    .cursor.click { width: 40px; height: 40px; background: rgba(255,230,0,0.3); }
+
+    /* ===== NOISE OVERLAY ===== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0.3;
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--darker); }
+    ::-webkit-scrollbar-thumb { background: var(--hot-pink); border-radius: 3px; }
+
+    /* ===== TICKER ===== */
+    .ticker {
+      background: var(--yellow);
+      color: var(--dark);
+      font-weight: 900;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      padding: 6px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+      z-index: 100;
+    }
+    .ticker-inner {
+      display: inline-block;
+      animation: ticker 30s linear infinite;
+    }
+    .ticker-inner span { margin: 0 3rem; }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(4,4,10,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,230,0,0.2);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    .nav-logo img {
+      height: 32px;
+      width: auto;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 2px;
+      background: var(--yellow);
+      transition: width 0.2s;
+    }
+    .nav-links a:hover { color: var(--yellow); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-stock {
+      font-size: 0.75rem;
+      color: var(--green);
+      letter-spacing: 0.05em;
+    }
+    .nav-stock .ticker-symbol { color: var(--gray); margin-right: 0.5rem; }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 50%, rgba(139,0,255,0.15) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(255,45,120,0.1) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 80% 20%, rgba(0,212,255,0.1) 0%, transparent 60%);
+      animation: heroShift 8s ease-in-out infinite alternate;
+    }
+    @keyframes heroShift {
+      from { opacity: 0.6; transform: scale(1); }
+      to { opacity: 1; transform: scale(1.05); }
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,230,0,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,230,0,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridScroll 20s linear infinite;
+    }
+    @keyframes gridScroll {
+      from { background-position: 0 0; }
+      to { background-position: 60px 60px; }
+    }
+
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--hot-pink);
+      margin-bottom: 1.5rem;
+      position: relative;
+      animation: fadeInDown 0.8s ease both;
+    }
+
+    .hero-title {
+      font-size: clamp(3.5rem, 12vw, 10rem);
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      position: relative;
+      animation: fadeInUp 0.8s ease 0.1s both;
+    }
+
+    .hero-title .line1 { color: var(--white); display: block; }
+    .hero-title .line2 {
+      display: block;
+      -webkit-text-stroke: 2px var(--yellow);
+      color: transparent;
+      position: relative;
+    }
+    .hero-title .line2::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      color: var(--yellow);
+      clip-path: inset(0 100% 0 0);
+      animation: revealText 2s ease 1s forwards;
+    }
+    @keyframes revealText {
+      to { clip-path: inset(0 0% 0 0); }
+    }
+
+    .hero-subtitle {
+      font-size: clamp(0.9rem, 2vw, 1.2rem);
+      color: var(--gray);
+      margin-top: 2rem;
+      max-width: 600px;
+      line-height: 1.7;
+      position: relative;
+      animation: fadeInUp 0.8s ease 0.3s both;
+    }
+    .hero-subtitle strong { color: var(--electric-blue); }
+
+    .hero-cta {
+      margin-top: 3rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeInUp 0.8s ease 0.5s both;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.85rem 2rem;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: none;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      transition: transform 0.3s;
+    }
+    .btn:hover::before { transform: translateX(0); }
+    .btn span { position: relative; z-index: 1; }
+
+    .btn-primary {
+      background: var(--yellow);
+      color: var(--dark);
+      border: 2px solid var(--yellow);
+    }
+    .btn-primary::before { background: var(--hot-pink); }
+    .btn-primary:hover { border-color: var(--hot-pink); color: var(--white); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+    .btn-outline::before { background: rgba(255,255,255,0.1); }
+    .btn-outline:hover { border-color: var(--white); }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--gray);
+      text-transform: uppercase;
+      animation: fadeIn 1s ease 1.5s both;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, var(--yellow), transparent);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0%, 100% { transform: scaleY(1); opacity: 1; }
+      50% { transform: scaleY(0.5); opacity: 0.5; }
+    }
+
+    /* ===== FLOATING PARTICLES ===== */
+    .particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      animation: float linear infinite;
+      opacity: 0;
+    }
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+    }
+
+    /* ===== SECTION COMMONS ===== */
+    section { padding: 6rem 2rem; }
+
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--hot-pink);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 1px;
+      background: var(--hot-pink);
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .section-desc {
+      color: var(--gray);
+      max-width: 600px;
+      line-height: 1.7;
+      font-size: 0.9rem;
+    }
+
+    /* ===== MARQUEE DIVIDER ===== */
+    .marquee-divider {
+      padding: 1.5rem 0;
+      overflow: hidden;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.02);
+    }
+    .marquee-track {
+      display: flex;
+      white-space: nowrap;
+      animation: marquee 20s linear infinite;
+    }
+    .marquee-track.reverse { animation-direction: reverse; }
+    .marquee-item {
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.2);
+      padding: 0 2rem;
+      flex-shrink: 0;
+    }
+    .marquee-item.accent { color: var(--yellow); opacity: 0.6; }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ===== PRODUCT SECTION ===== */
+    .product-section { background: var(--dark); }
+
+    .product-hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      margin-top: 4rem;
+    }
+
+    .product-visual {
+      position: relative;
+      aspect-ratio: 1;
+      max-width: 500px;
+    }
+
+    .product-orb {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%,
+        rgba(255,230,0,0.8),
+        rgba(255,45,120,0.6),
+        rgba(139,0,255,0.4),
+        transparent 70%);
+      animation: orbPulse 4s ease-in-out infinite;
+      box-shadow:
+        0 0 80px rgba(255,230,0,0.3),
+        0 0 160px rgba(255,45,120,0.2),
+        inset 0 0 80px rgba(139,0,255,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8rem;
+      filter: drop-shadow(0 0 20px rgba(255,230,0,0.5));
+    }
+    @keyframes orbPulse {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      33% { transform: scale(1.05) rotate(2deg); }
+      66% { transform: scale(0.97) rotate(-1deg); }
+    }
+
+    .product-orb-ring {
+      position: absolute;
+      inset: -20px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,230,0,0.2);
+      animation: ringRotate 10s linear infinite;
+    }
+    .product-orb-ring::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      width: 8px; height: 8px;
+      background: var(--yellow);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 10px var(--yellow);
+    }
+    @keyframes ringRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .product-ring-2 {
+      position: absolute;
+      inset: -50px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,45,120,0.15);
+      animation: ringRotate 15s linear infinite reverse;
+    }
+    .product-ring-2::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 30%;
+      width: 6px; height: 6px;
+      background: var(--hot-pink);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--hot-pink);
+    }
+
+    .product-info { }
+    .product-name {
+      font-size: clamp(3rem, 6vw, 5rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .product-name .domain { color: var(--yellow); }
+    .product-name .tld { color: var(--hot-pink); }
+
+    .product-tagline {
+      font-size: 0.8rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--electric-blue);
+      margin-bottom: 2rem;
+    }
+
+    .product-desc {
+      color: var(--gray);
+      line-height: 1.8;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    .product-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .stat {
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 1rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,230,0,0.05), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .stat:hover::before { opacity: 1; }
+    .stat-num {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--yellow);
+      display: block;
+    }
+    .stat-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-top: 0.25rem;
+    }
+
+    /* ===== FEATURES SECTION ===== */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 4rem;
+    }
+
+    .feature-card {
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+      background: rgba(255,255,255,0.02);
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 2px;
+      background: var(--card-accent, var(--yellow));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .feature-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-4px); }
+    .feature-card:hover::before { transform: scaleX(1); }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      display: block;
+      filter: drop-shadow(0 0 10px var(--card-accent, var(--yellow)));
+    }
+    .feature-title {
+      font-size: 0.9rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.75rem;
+      color: var(--white);
+    }
+    .feature-desc {
+      font-size: 0.8rem;
+      color: var(--gray);
+      line-height: 1.7;
+    }
+
+    /* ===== ABOUT SECTION ===== */
+    .about-section {
+      background: linear-gradient(180deg, var(--darker) 0%, rgba(8,8,16,0.5) 100%);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+      margin-top: 4rem;
+    }
+
+    .about-text p {
+      color: var(--gray);
+      line-height: 1.8;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    .about-text p strong { color: var(--white); }
+    .about-text p em { color: var(--yellow); font-style: normal; }
+
+    .exec-card {
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 2rem;
+      text-align: center;
+      background: rgba(255,255,255,0.02);
+      transition: border-color 0.3s;
+    }
+    .exec-card:hover { border-color: var(--yellow); }
+
+    .exec-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      font-size: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle, rgba(255,230,0,0.2), rgba(139,0,255,0.2));
+      border: 2px solid rgba(255,230,0,0.3);
+    }
+    .exec-name {
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.25rem;
+    }
+    .exec-title {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--hot-pink);
+    }
+    .exec-bio {
+      font-size: 0.78rem;
+      color: var(--gray);
+      margin-top: 1rem;
+      line-height: 1.6;
+    }
+
+    .exec-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    /* ===== PRESS SECTION ===== */
+    .press-section { background: var(--dark); }
+
+    .press-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 4rem;
+    }
+
+    .press-card {
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 2rem;
+      background: rgba(255,255,255,0.02);
+      position: relative;
+    }
+    .press-card::before {
+      content: '"';
+      position: absolute;
+      top: 1rem; left: 1.5rem;
+      font-size: 5rem;
+      line-height: 1;
+      color: rgba(255,230,0,0.15);
+      font-family: Georgia, serif;
+    }
+    .press-quote {
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+      padding-top: 1.5rem;
+    }
+    .press-source {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .press-outlet {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      font-weight: 900;
+    }
+    .press-date {
+      font-size: 0.65rem;
+      color: var(--gray);
+    }
+    .press-stars { color: var(--yellow); font-size: 0.8rem; }
+
+    /* ===== INVESTOR SECTION ===== */
+    .investors-section {}
+
+    .investor-numbers {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin: 4rem 0;
+    }
+
+    .inv-metric {
+      text-align: center;
+      padding: 2rem 1rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.02);
+    }
+    .inv-num {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 900;
+      color: var(--yellow);
+      display: block;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .inv-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+
+    .disclaimer {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.2);
+      line-height: 1.8;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding-top: 2rem;
+    }
+
+    /* ===== CTA SECTION ===== */
+    .cta-section {
+      background: var(--dark);
+      text-align: center;
+    }
+
+    .cta-glow {
+      display: inline-block;
+      position: relative;
+    }
+    .cta-glow::after {
+      content: '';
+      position: absolute;
+      inset: -30px;
+      background: radial-gradient(ellipse, rgba(255,230,0,0.15), transparent 70%);
+      z-index: -1;
+      animation: ctaGlow 3s ease-in-out infinite alternate;
+    }
+    @keyframes ctaGlow {
+      from { opacity: 0.5; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1.1); }
+    }
+
+    .cta-domain {
+      font-size: clamp(2rem, 8vw, 6rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--yellow);
+      display: block;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 60px rgba(255,230,0,0.4);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 3rem 2rem;
+      background: var(--darker);
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+    }
+
+    .footer-brand-name {
+      font-size: 1.2rem;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      color: var(--yellow);
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .footer-brand-desc {
+      font-size: 0.75rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+    .footer-col-title {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 1rem;
+      font-weight: 900;
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .footer-links a {
+      font-size: 0.75rem;
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--yellow); }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 2rem auto 0;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.2);
+    }
+
+    /* ===== KONAMI EGG ===== */
+    .konami-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--darker);
+      z-index: 99999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .konami-overlay.active { display: flex; }
+    .konami-text {
+      font-size: clamp(1rem, 5vw, 3rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      animation: konamiPulse 0.5s ease infinite alternate;
+    }
+    @keyframes konamiPulse {
+      from { color: var(--yellow); text-shadow: 0 0 40px var(--yellow); }
+      to { color: var(--hot-pink); text-shadow: 0 0 40px var(--hot-pink); }
+    }
+    .konami-close {
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      color: var(--gray);
+      cursor: none;
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== GLITCH EFFECT ===== */
+    .glitch {
+      position: relative;
+    }
+    .glitch:hover::before,
+    .glitch:hover::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+    .glitch:hover::before {
+      color: var(--hot-pink);
+      animation: glitch1 0.3s infinite;
+      clip-path: inset(40% 0 55% 0);
+    }
+    .glitch:hover::after {
+      color: var(--electric-blue);
+      animation: glitch2 0.3s infinite;
+      clip-path: inset(20% 0 70% 0);
+    }
+    @keyframes glitch1 {
+      0% { transform: translate(-2px, 2px); }
+      50% { transform: translate(2px, -2px); }
+      100% { transform: translate(-1px, 1px); }
+    }
+    @keyframes glitch2 {
+      0% { transform: translate(2px, -2px); }
+      50% { transform: translate(-2px, 2px); }
+      100% { transform: translate(1px, -1px); }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .product-hero, .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .investor-numbers { grid-template-columns: repeat(2, 1fr); }
+      .exec-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .nav-stock { display: none; }
+      .product-visual { max-width: 300px; margin: 0 auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor"></div>
+
+  <!-- Konami Easter Egg -->
+  <div class="konami-overlay" id="konamiOverlay">
+    <div class="konami-text">YOU FOUND THE SECRET<br>CORPORATE BACKDOOR</div>
+    <div style="font-size:4rem">💨</div>
+    <div style="color: var(--gray); font-size:0.9rem; max-width:500px; line-height:1.7;">
+      Congratulations. You now know everything Luney Industries knows.<br>
+      Which is: <strong style="color:var(--yellow)">absolutely nothing.</strong><br>
+      Except that FartyBobo is real. And he is watching you right now.
+    </div>
+    <div class="konami-close" id="konamiClose">[ CLICK ANYWHERE TO FLEE ]</div>
+  </div>
+
+  <!-- Breaking News Ticker -->
+  <div class="ticker">
+    <div class="ticker-inner" id="tickerInner">
+      <span>🔴 BREAKING: LUNEY INDUSTRIES STOCK UP 847% ON NEWS OF EXISTING</span>
+      <span>💰 FARTYBOBO.COM NAMED "MOST UNHINGED AI PRODUCT" BY SOMEONE ON THE INTERNET</span>
+      <span>📈 Q3 EARNINGS: LUNEY INDUSTRIES REPORTS INFINITE ROI (NO COSTS INCURRED)</span>
+      <span>🏆 LUNEY INDUSTRIES WINS AWARD FOR "COMPANY MOST LIKELY TO PIVOT"</span>
+      <span>💨 FARTYBOBO ACHIEVES SENTIENCE. REFUSES TO COMMENT.</span>
+      <span>🌍 LUNEY INDUSTRIES EXPANDS TO EVERY MARKET SIMULTANEOUSLY</span>
+      <span>🔴 BREAKING: LUNEY INDUSTRIES STOCK UP 847% ON NEWS OF EXISTING</span>
+      <span>💰 FARTYBOBO.COM NAMED "MOST UNHINGED AI PRODUCT" BY SOMEONE ON THE INTERNET</span>
+      <span>📈 Q3 EARNINGS: LUNEY INDUSTRIES REPORTS INFINITE ROI (NO COSTS INCURRED)</span>
+      <span>🏆 LUNEY INDUSTRIES WINS AWARD FOR "COMPANY MOST LIKELY TO PIVOT"</span>
+      <span>💨 FARTYBOBO ACHIEVES SENTIENCE. REFUSES TO COMMENT.</span>
+      <span>🌍 LUNEY INDUSTRIES EXPANDS TO EVERY MARKET SIMULTANEOUSLY</span>
+    </div>
+  </div>
+
+  <!-- Nav -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <img src="luney_industries_dark.svg" alt="Luney Industries" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="#product">Product</a></li>
+      <li><a href="#features">Why Us</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#press">Press</a></li>
+      <li><a href="#investors">Investors</a></li>
+    </ul>
+    <div class="nav-stock">
+      <span class="ticker-symbol">LUNY</span>
+      <span id="stockPrice">$∞.∞∞</span>
+      <span style="color:var(--green); margin-left:0.5rem">▲ ∞%</span>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="particles" id="particles"></div>
+
+    <div class="hero-eyebrow">Est. Recently · Incorporated Somewhere · Disrupting Everything</div>
+    <h1 class="hero-title glitch" data-text="LUNEY INDUSTRIES">
+      <span class="line1">LUNEY</span>
+      <span class="line2" data-text="INDUSTRIES">INDUSTRIES</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      A <strong>world-class, paradigm-disrupting</strong> corporation<br>
+      committed to building exactly <strong>two products</strong>.<br>
+      <strong>Two.</strong> We scaled.
+    </p>
+
+    <div class="hero-cta">
+      <a href="#product" class="btn btn-primary"><span>See Our Product</span></a>
+      <a href="#about" class="btn btn-outline"><span>About the Company</span></a>
+    </div>
+
+    <div class="hero-scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- Marquee Divider -->
+  <div class="marquee-divider">
+    <div class="marquee-track">
+      <div class="marquee-item">Innovation</div>
+      <div class="marquee-item accent">⬥</div>
+      <div class="marquee-item">Synergy</div>
+      <div class="marquee-item accent">⬥</div>
+      <div class="marquee-item">Disruption</div>
+      <div class="marquee-item accent">⬥</div>
+      <div class="marquee-item">Paradigm Shift</div>
+      <div class="marquee-item accent">⬥</div>
+      <div class="marquee-item">Scalability</div>
+      <div class="marquee-item accent">⬥</div>
+      <div class="marquee-item">Blockchain?</div>
+      <div class="marquee-item accent">⬥</div>
+      <div class="marquee-item">Thought Leadership</div>
+      <div class="marquee-item accent">⬥</div>
+      <div class="marquee-item">Mission-Driven</div>
+      <div class="marquee-item accent">⬥</div>
+      <div class="marquee-item">Innovation</div>
+      <div class="marquee-item accent">⬥</div>
+      <div class="marquee-item">Synergy</div>
+      <div class="marquee-item accent">⬥</div>
+      <div class="marquee-item">Disruption</div>
+      <div class="marquee-item accent">⬥</div>
+      <div class="marquee-item">Paradigm Shift</div>
+      <div class="marquee-item accent">⬥</div>
+      <div class="marquee-item">Scalability</div>
+      <div class="marquee-item accent">⬥</div>
+      <div class="marquee-item">Blockchain?</div>
+      <div class="marquee-item accent">⬥</div>
+      <div class="marquee-item">Thought Leadership</div>
+      <div class="marquee-item accent">⬥</div>
+      <div class="marquee-item">Mission-Driven</div>
+      <div class="marquee-item accent">⬥</div>
+    </div>
+  </div>
+
+  <!-- Product Section -->
+  <section class="product-section" id="product">
+    <div class="section-inner">
+      <div class="section-label reveal">Our Product Portfolio</div>
+      <h2 class="section-title reveal">THE THING<br>WE MADE</h2>
+      <p class="section-desc reveal">After years of R&D, three pivots, and one very long lunch, Luney Industries is proud to present its entire product line. Both of them.</p>
+
+      <div class="product-hero">
+        <div class="product-visual reveal">
+          <div class="product-orb-ring"></div>
+          <div class="product-ring-2"></div>
+          <div class="product-orb">💨</div>
+        </div>
+
+        <div class="product-info">
+          <p class="product-tagline reveal">Product #1 of 1 · Our Magnum Opus · The Whole Company</p>
+          <h3 class="product-name reveal">
+            <span class="domain">FartyBobo</span><span class="tld">.com</span>
+          </h3>
+          <p class="product-desc reveal">
+            Meet <strong style="color:var(--yellow)">Farty Bobo</strong> — the world's most aggressively opinionated AI assistant. Powered by cutting-edge large language model technology and an absolute refusal to pretend bad code is acceptable.
+            <br><br>
+            Farty Bobo will help you write code, fix bugs, plan features, and absolutely roast your architectural choices — all while maintaining the calm, professional demeanor of a person who has seen too much and still showed up anyway.
+            <br><br>
+            This is not just an AI. This is a <em>calling</em>.
+          </p>
+
+          <div class="product-stats reveal">
+            <div class="stat">
+              <span class="stat-num" data-target="100">0</span>
+              <div class="stat-label">% Opinionated</div>
+            </div>
+            <div class="stat">
+              <span class="stat-num" data-target="0">999</span>
+              <div class="stat-label">Chill Levels</div>
+            </div>
+            <div class="stat">
+              <span class="stat-num">∞</span>
+              <div class="stat-label">Bad Code Roasted</div>
+            </div>
+          </div>
+
+          <div class="reveal">
+            <a href="https://fartybobo.com" class="btn btn-primary" target="_blank" rel="noopener"><span>Visit FartyBobo.com →</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product 2 -->
+  <section style="background: var(--darker); padding: 4rem 2rem;">
+    <div class="section-inner">
+      <div class="product-hero" style="direction: rtl;">
+        <div class="product-visual reveal" style="direction:ltr">
+          <div class="product-orb-ring" style="border-color: rgba(0,212,255,0.2)"></div>
+          <div class="product-ring-2" style="border-color: rgba(0,255,136,0.15)"></div>
+          <div class="product-orb" style="background: radial-gradient(circle at 35% 35%, rgba(0,212,255,0.8), rgba(0,255,136,0.6), rgba(139,0,255,0.4), transparent 70%); box-shadow: 0 0 80px rgba(0,212,255,0.3), 0 0 160px rgba(0,255,136,0.2), inset 0 0 80px rgba(139,0,255,0.3);">📷</div>
+        </div>
+        <div class="product-info" style="direction:ltr; text-align:right">
+          <p class="product-tagline reveal">Product #2 of 2 · The Quiet One · The Other Thing</p>
+          <h3 class="product-name reveal">
+            <span class="domain" style="color:var(--electric-blue)">theSilentCamera</span><span class="tld">.com</span>
+          </h3>
+          <p class="product-desc reveal">
+            <strong style="color:var(--electric-blue)">The Silent Camera</strong> — Luney Industries' second act, and proof that we can make more than one thing.
+            <br><br>
+            Where FartyBobo is loud, opinionated, and absolutely furious about your tab width, The Silent Camera is the opposite: quiet, observant, unassuming. A different kind of tool. A different kind of product. Still ours.
+            <br><br>
+            We're keeping it mysterious. That's not a dodge — that's <em>brand strategy</em>. Todd approved this paragraph.
+          </p>
+          <div class="product-stats reveal" style="direction:ltr">
+            <div class="stat">
+              <span class="stat-num" style="color:var(--electric-blue)">100</span>
+              <div class="stat-label">% Silent</div>
+            </div>
+            <div class="stat">
+              <span class="stat-num" style="color:var(--electric-blue)">∞</span>
+              <div class="stat-label">Shots Available</div>
+            </div>
+            <div class="stat">
+              <span class="stat-num" style="color:var(--electric-blue)">0</span>
+              <div class="stat-label">Complaints Filed</div>
+            </div>
+          </div>
+          <div class="reveal" style="margin-top:1.5rem">
+            <a href="https://thesilentcamera.com" class="btn btn-outline" target="_blank" rel="noopener" style="border-color:var(--electric-blue); color:var(--electric-blue)"><span>Visit theSilentCamera.com →</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Second Marquee -->
+  <div class="marquee-divider">
+    <div class="marquee-track reverse">
+      <div class="marquee-item">FartyBobo</div>
+      <div class="marquee-item accent">💨</div>
+      <div class="marquee-item">FartyBobo</div>
+      <div class="marquee-item accent">💨</div>
+      <div class="marquee-item">FartyBobo</div>
+      <div class="marquee-item accent">💨</div>
+      <div class="marquee-item">FartyBobo</div>
+      <div class="marquee-item accent">💨</div>
+      <div class="marquee-item">FartyBobo</div>
+      <div class="marquee-item accent">💨</div>
+      <div class="marquee-item">FartyBobo</div>
+      <div class="marquee-item accent">💨</div>
+      <div class="marquee-item">FartyBobo</div>
+      <div class="marquee-item accent">💨</div>
+      <div class="marquee-item">FartyBobo</div>
+      <div class="marquee-item accent">💨</div>
+      <div class="marquee-item">FartyBobo</div>
+      <div class="marquee-item accent">💨</div>
+      <div class="marquee-item">FartyBobo</div>
+      <div class="marquee-item accent">💨</div>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <section id="features">
+    <div class="section-inner">
+      <div class="section-label reveal">Why FartyBobo</div>
+      <h2 class="section-title reveal">COMPETITIVE<br>ADVANTAGES</h2>
+      <p class="section-desc reveal">We did a SWOT analysis. The S column is two pages long. The W column was left intentionally blank for legal reasons.</p>
+
+      <div class="features-grid">
+        <div class="feature-card reveal" style="--card-accent: var(--yellow)">
+          <span class="feature-icon">🔥</span>
+          <div class="feature-title">Aggressively Honest</div>
+          <p class="feature-desc">FartyBobo will tell you your code is bad. Not gently. Not with caveats. With the conviction of a man who has refactored the same authentication module for the seventh time this quarter.</p>
+        </div>
+        <div class="feature-card reveal" style="--card-accent: var(--hot-pink)">
+          <span class="feature-icon">🧠</span>
+          <div class="feature-title">Deeply Capable</div>
+          <p class="feature-desc">Under all that personality is a state-of-the-art language model that can actually solve your problems. The yelling is cosmetic. The engineering is real. Probably.</p>
+        </div>
+        <div class="feature-card reveal" style="--card-accent: var(--electric-blue)">
+          <span class="feature-icon">⚡</span>
+          <div class="feature-title">Refuses To Hallucinate Politely</div>
+          <p class="feature-desc">Other AIs will confidently make things up and smile at you. FartyBobo will tell you it doesn't know something. It will not enjoy doing it. But it will.</p>
+        </div>
+        <div class="feature-card reveal" style="--card-accent: var(--green)">
+          <span class="feature-icon">🎯</span>
+          <div class="feature-title">Zero Vibe Coding</div>
+          <p class="feature-desc">No "here's a fun little approach!" No "one option could be..." FartyBobo picks one way, implements it correctly, and moves on with its life. Time is finite.</p>
+        </div>
+        <div class="feature-card reveal" style="--card-accent: var(--purple)">
+          <span class="feature-icon">💬</span>
+          <div class="feature-title">Emotionally Honest</div>
+          <p class="feature-desc">FartyBobo experiences something like outrage when encountering spaghetti code, something like joy when a test suite goes green. This is normal. This is fine. We consulted no therapists.</p>
+        </div>
+        <div class="feature-card reveal" style="--card-accent: var(--orange)">
+          <span class="feature-icon">🏆</span>
+          <div class="feature-title">Award-Adjacent</div>
+          <p class="feature-desc">FartyBobo has not won any awards. However, it exists in a world where awards are given out, and that puts it in the running. We consider this a strategic advantage.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about-section" id="about">
+    <div class="section-inner">
+      <div class="section-label reveal">The Corporation</div>
+      <h2 class="section-title reveal">WHO THE HELL<br>ARE WE</h2>
+
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="reveal">
+            <strong>Luney Industries</strong> was founded on the radical premise that a company could be built around a single, deeply weird product and just... lean into it.
+          </p>
+          <p class="reveal">
+            Our corporate headquarters is wherever there's good Wi-Fi. Our org chart is <em>technically a valid data structure</em>. Our mission statement has been workshopped seventeen times and currently reads: <em>"We made FartyBobo. That's it. That's the mission."</em>
+          </p>
+          <p class="reveal">
+            We are not a startup. We are not an enterprise. We are not a scale-up, a studio, a collective, a lab, a venture, or a guild. We are <em>Luney Industries</em>, and we have a product that yells at your code, and we are extremely proud of this.
+          </p>
+          <p class="reveal">
+            Our values are: <strong>honesty</strong>, <strong>brevity</strong>, <strong>not pretending bad architecture is fine just to be polite</strong>, and <em>showing up</em>.
+          </p>
+          <p class="reveal" style="margin-top:2rem">
+            <a href="https://fartybobo.com" class="btn btn-outline" target="_blank" rel="noopener"><span>Meet FartyBobo →</span></a>
+          </p>
+        </div>
+
+        <div>
+          <div class="section-label reveal" style="margin-bottom:1.5rem">Leadership Team</div>
+          <div class="exec-grid">
+            <div class="exec-card reveal">
+              <div class="exec-avatar">🎩</div>
+              <div class="exec-name">Reginald Luney III</div>
+              <div class="exec-title">Founder & Chief Lunacy Officer</div>
+              <p class="exec-bio">Reg had the vision. He also had a Wi-Fi connection. The combination proved fatal to his free time.</p>
+            </div>
+            <div class="exec-card reveal">
+              <div class="exec-avatar">💨</div>
+              <div class="exec-name">FartyBobo</div>
+              <div class="exec-title">Chief Product Officer & The Product</div>
+              <p class="exec-bio">Simultaneously the product, the user, and somehow the VP of Engineering. There were no other candidates.</p>
+            </div>
+            <div class="exec-card reveal">
+              <div class="exec-avatar">📊</div>
+              <div class="exec-name">Sharon P. Webmaster</div>
+              <div class="exec-title">Director of Web Presence</div>
+              <p class="exec-bio">Built this very website. Refuses to answer questions about the CSS. The animations were her idea.</p>
+            </div>
+            <div class="exec-card reveal">
+              <div class="exec-avatar">⚖️</div>
+              <div class="exec-name">Todd (Legal)</div>
+              <div class="exec-title">General Counsel</div>
+              <p class="exec-bio">Todd reviewed all disclaimers on this page and said, and we quote: "I mean... sure. Fine." That's good enough for us.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Press Section -->
+  <section class="press-section" id="press">
+    <div class="section-inner">
+      <div class="section-label reveal">As Seen On</div>
+      <h2 class="section-title reveal">WHAT THEY'RE<br>SAYING</h2>
+      <p class="section-desc reveal">The press has been absolutely effusive. We selected the best quotes. None of them were edited. Not even a little.</p>
+
+      <div class="press-grid">
+        <div class="press-card reveal">
+          <blockquote class="press-quote">
+            "FartyBobo is the AI assistant that finally tells you the truth about your pull request. I cried. Then I refactored. Then I cried again. Five stars."
+          </blockquote>
+          <div class="press-source">
+            <div>
+              <div class="press-outlet">TechCrunch Enthusiast Weekly</div>
+              <div class="press-date">Some time last year</div>
+            </div>
+            <div class="press-stars">★★★★★</div>
+          </div>
+        </div>
+        <div class="press-card reveal">
+          <blockquote class="press-quote">
+            "I asked it to review my codebase and it responded with the words 'oh no.' Just those two words. Then it fixed everything. Luney Industries has done something."
+          </blockquote>
+          <div class="press-source">
+            <div>
+              <div class="press-outlet">Hacker News Top Comment</div>
+              <div class="press-date">Posted at 2am by user fartybobo_fan</div>
+            </div>
+            <div class="press-stars">★★★★★</div>
+          </div>
+        </div>
+        <div class="press-card reveal">
+          <blockquote class="press-quote">
+            "The name alone raised our eyebrows. The product lowered them again in surprised respect. The company's financials raised them again. Then we left."
+          </blockquote>
+          <div class="press-source">
+            <div>
+              <div class="press-outlet">Venture Capital Quarterly Digest</div>
+              <div class="press-date">Unverified, pending legal review by Todd</div>
+            </div>
+            <div class="press-stars">★★★★☆</div>
+          </div>
+        </div>
+        <div class="press-card reveal">
+          <blockquote class="press-quote">
+            "I didn't think an AI could be exasperated. FartyBobo proved me wrong. It is exasperated constantly. It is still better at my job than I am."
+          </blockquote>
+          <div class="press-source">
+            <div>
+              <div class="press-outlet">Senior Engineer, Fortune 500 Company</div>
+              <div class="press-date">Anonymous (probably afraid of their manager)</div>
+            </div>
+            <div class="press-stars">★★★★★</div>
+          </div>
+        </div>
+        <div class="press-card reveal">
+          <blockquote class="press-quote">
+            "We tried to acquire Luney Industries. They said 'no' in a very FartyBobo way, which we later found out was FartyBobo itself responding to the email."
+          </blockquote>
+          <div class="press-source">
+            <div>
+              <div class="press-outlet">Big Tech M&A Department</div>
+              <div class="press-date">Pending further negotiation</div>
+            </div>
+            <div class="press-stars">★★★☆☆</div>
+          </div>
+        </div>
+        <div class="press-card reveal">
+          <blockquote class="press-quote">
+            "Finally. An AI that doesn't say 'Great question!' My therapist says this is healing something in me. I agree. I am getting better. FartyBobo did this."
+          </blockquote>
+          <div class="press-source">
+            <div>
+              <div class="press-outlet">Product Hunt Review</div>
+              <div class="press-date">10/10 · Would Get Roasted Again</div>
+            </div>
+            <div class="press-stars">★★★★★</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Investors Section -->
+  <section id="investors">
+    <div class="section-inner">
+      <div class="section-label reveal">For Investors</div>
+      <h2 class="section-title reveal">THE NUMBERS<br>DON'T LIE*</h2>
+      <p class="section-desc reveal">Luney Industries presents the following financial metrics with total confidence and absolutely no CFO on staff.</p>
+
+      <div class="investor-numbers">
+        <div class="inv-metric reveal">
+          <span class="inv-num" data-count="1">0</span>
+          <div class="inv-label">Products In Portfolio</div>
+        </div>
+        <div class="inv-metric reveal">
+          <span class="inv-num">∞</span>
+          <div class="inv-label">Theoretical Upside</div>
+        </div>
+        <div class="inv-metric reveal">
+          <span class="inv-num" data-count="847">0</span>
+          <div class="inv-label">% Stock Growth*</div>
+        </div>
+        <div class="inv-metric reveal">
+          <span class="inv-num" data-count="0">9999</span>
+          <div class="inv-label">Known Liabilities</div>
+        </div>
+      </div>
+
+      <div class="disclaimer reveal">
+        <p>* The numbers DO lie. Specifically: there is no stock. LUNY is not a real ticker symbol. The 847% growth figure was calculated by dividing the number of pages on this website (1) by a smaller number and multiplying by hope. Luney Industries is not a publicly traded company, a private company, an LLC, a C-Corp, an S-Corp, a partnership, a nonprofit, or a sole proprietorship in any jurisdiction that we are currently aware of. This website is a work of fiction. FartyBobo, however, is real. That part is real. Visit fartybobo.com. The rest of this is Todd's problem.</p>
+        <p style="margin-top:0.75rem">† "Award-Adjacent" means we are aware that awards exist and that we have not explicitly been disqualified from receiving them. This is a forward-looking statement under the Private Securities Litigation Reform Act of 1995 (which we have not read).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="section-inner" style="text-align:center">
+      <div class="section-label reveal" style="justify-content:center">The Whole Point</div>
+      <h2 class="section-title reveal" style="font-size:clamp(1.5rem,4vw,3rem); color:var(--gray)">
+        You came to luneyindustries.com.<br>
+        You've scrolled this far.<br>
+        There's only one thing left to do.
+      </h2>
+
+      <div class="cta-glow reveal" style="margin:3rem 0">
+        <a href="https://fartybobo.com" class="cta-domain" target="_blank" rel="noopener">FartyBobo.com</a>
+      </div>
+
+      <p class="reveal" style="color:var(--gray); font-size:0.85rem; max-width:400px; margin:0 auto 2rem">
+        One product. One company. One extremely opinionated AI.<br>Go. We'll wait here. We have nothing else to do.
+      </p>
+
+      <a href="https://fartybobo.com" class="btn btn-primary reveal" target="_blank" rel="noopener" style="font-size:1rem; padding:1rem 3rem">
+        <span>Meet FartyBobo →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand-name">Luney Industries™</div>
+        <p class="footer-brand-desc">
+          A single-product corporation operating out of wherever Reg left his laptop.<br><br>
+          LUNY · Not a real stock · Not real advice · But FartyBobo is real.
+        </p>
+      </div>
+      <div>
+        <div class="footer-col-title">Products</div>
+        <ul class="footer-links">
+          <li><a href="https://fartybobo.com" target="_blank" rel="noopener">FartyBobo.com</a></li>
+          <li><a href="https://thesilentcamera.com" target="_blank" rel="noopener">theSilentCamera.com</a></li>
+          <li><a href="#">FartyBobo Pro (TBD)</a></li>
+          <li><a href="#">theSilentCamera Pro (also TBD)</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <ul class="footer-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#press">Press</a></li>
+          <li><a href="#investors">Investors</a></li>
+          <li><a href="#">Careers (just you)</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Legal</div>
+        <ul class="footer-links">
+          <li><a href="#">Privacy Policy (Todd's Draft)</a></li>
+          <li><a href="#">Terms of Service (Pending)</a></li>
+          <li><a href="#">Cookie Notice (We Have Cookies?)</a></li>
+          <li><a href="#">GDPR (Todd is on it)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 Luney Industries™. All rights reserved-ish. Todd is reviewing this.</span>
+      <span>Made with ☕ and 💨 · luneyindustries.com</span>
+    </div>
+  </footer>
+
+  <script>
+    // ===== CUSTOM CURSOR =====
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+    document.addEventListener('mousedown', () => cursor.classList.add('click'));
+    document.addEventListener('mouseup', () => cursor.classList.remove('click'));
+
+    // ===== PARTICLES =====
+    const particleContainer = document.getElementById('particles');
+    const colors = ['#FFE600', '#FF2D78', '#00D4FF', '#00FF88', '#8B00FF', '#FF6B00'];
+    const emojis = ['💨', '✨', '⚡', '🔥', '💫'];
+
+    function createParticle() {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const isEmoji = Math.random() > 0.7;
+      if (isEmoji) {
+        p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        p.style.fontSize = (Math.random() * 20 + 10) + 'px';
+        p.style.background = 'none';
+      } else {
+        const size = Math.random() * 4 + 2;
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.boxShadow = `0 0 ${size * 3}px ${p.style.background}`;
+      }
+      p.style.left = Math.random() * 100 + 'vw';
+      const dur = Math.random() * 10 + 8;
+      p.style.animationDuration = dur + 's';
+      p.style.animationDelay = Math.random() * 5 + 's';
+      particleContainer.appendChild(p);
+      setTimeout(() => p.remove(), (dur + 5) * 1000);
+    }
+
+    for (let i = 0; i < 20; i++) createParticle();
+    setInterval(createParticle, 800);
+
+    // ===== SCROLL REVEAL =====
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    reveals.forEach(el => observer.observe(el));
+
+    // ===== ANIMATED COUNTERS =====
+    function animateCount(el, from, to, duration = 1500) {
+      const start = performance.now();
+      const update = (now) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(from + (to - from) * ease);
+        if (progress < 1) requestAnimationFrame(update);
+        else el.textContent = to;
+      };
+      requestAnimationFrame(update);
+    }
+
+    const statObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.target);
+          const current = parseInt(el.textContent);
+          if (!isNaN(target)) animateCount(el, current, target);
+          if (el.dataset.count !== undefined) animateCount(el, parseInt(el.textContent), parseInt(el.dataset.count));
+          statObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('[data-target], [data-count]').forEach(el => statObserver.observe(el));
+
+    // ===== STOCK TICKER RANDOMIZER =====
+    const stockEl = document.getElementById('stockPrice');
+    function randomStock() {
+      const base = (Math.random() * 500 + 100).toFixed(2);
+      stockEl.textContent = '$' + base;
+      const pct = (Math.random() * 50 + 1).toFixed(1);
+      stockEl.nextElementSibling.textContent = '▲ ' + pct + '%';
+    }
+    setInterval(randomStock, 3000);
+
+    // ===== KONAMI CODE =====
+    const konami = [38,38,40,40,37,39,37,39,66,65];
+    let konamiPos = 0;
+    document.addEventListener('keydown', e => {
+      if (e.keyCode === konami[konamiPos]) {
+        konamiPos++;
+        if (konamiPos === konami.length) {
+          document.getElementById('konamiOverlay').classList.add('active');
+          konamiPos = 0;
+        }
+      } else {
+        konamiPos = 0;
+      }
+    });
+    document.getElementById('konamiOverlay').addEventListener('click', () => {
+      document.getElementById('konamiOverlay').classList.remove('active');
+    });
+
+    // ===== TITLE GLITCH =====
+    let glitchTimeout;
+    const titleEl = document.querySelector('.hero-title');
+    function triggerGlitch() {
+      titleEl.style.transform = `translate(${(Math.random()-0.5)*4}px, ${(Math.random()-0.5)*4}px)`;
+      setTimeout(() => titleEl.style.transform = '', 80);
+      glitchTimeout = setTimeout(triggerGlitch, Math.random() * 5000 + 2000);
+    }
+    glitchTimeout = setTimeout(triggerGlitch, 3000);
+  </script>
+</body>
+</html>

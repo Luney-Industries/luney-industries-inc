@@ -1,0 +1,36 @@
+<svg width="680" height="680" viewBox="0 0 680 680" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Luney Industries Inc — company avatar</title>
+<desc>A circular badge avatar featuring a crescent moon over a stylized industrial gear, for Luney Industries Inc.</desc>
+
+<circle cx="340" cy="340" r="312" fill="none" stroke="#185FA5" stroke-width="3"/>
+<circle cx="340" cy="340" r="295" fill="none" stroke="#B5D4F4" stroke-width="1"/>
+<circle cx="340" cy="340" r="290" fill="#E6F1FB"/>
+
+<g transform="translate(340,380)">
+  <circle r="78" fill="#B5D4F4"/>
+  <rect x="-12" y="-108" width="24" height="36" rx="4" fill="#B5D4F4"/>
+  <rect x="-12" y="72" width="24" height="36" rx="4" fill="#B5D4F4"/>
+  <rect x="72" y="-12" width="36" height="24" rx="4" fill="#B5D4F4"/>
+  <rect x="-108" y="-12" width="36" height="24" rx="4" fill="#B5D4F4"/>
+  <rect x="54" y="-90" width="36" height="24" rx="4" transform="rotate(45,72,-78)" fill="#B5D4F4"/>
+  <rect x="-90" y="-90" width="36" height="24" rx="4" transform="rotate(-45,-72,-78)" fill="#B5D4F4"/>
+  <rect x="54" y="66" width="36" height="24" rx="4" transform="rotate(-45,72,78)" fill="#B5D4F4"/>
+  <rect x="-90" y="66" width="36" height="24" rx="4" transform="rotate(45,-72,78)" fill="#B5D4F4"/>
+  <circle r="28" fill="none" stroke="#185FA5" stroke-width="6"/>
+</g>
+
+<circle cx="360" cy="278" r="96" fill="#042C53"/>
+<circle cx="396" cy="252" r="78" fill="#E6F1FB"/>
+
+<circle cx="196" cy="210" r="6" fill="#185FA5"/>
+<circle cx="500" cy="188" r="4" fill="#185FA5"/>
+<circle cx="460" cy="480" r="5" fill="#185FA5"/>
+<circle cx="174" cy="430" r="4" fill="#185FA5"/>
+<circle cx="530" cy="370" r="3" fill="#185FA5"/>
+<circle cx="220" cy="300" r="3" fill="#185FA5"/>
+
+<text x="340" y="548" font-family="system-ui, sans-serif" font-size="52" font-weight="700" text-anchor="middle" fill="#042C53" letter-spacing="4">LUNEY</text>
+<text x="340" y="596" font-family="system-ui, sans-serif" font-size="22" font-weight="400" text-anchor="middle" letter-spacing="10" fill="#185FA5">INDUSTRIES</text>
+<text x="340" y="630" font-family="system-ui, sans-serif" font-size="16" font-weight="400" text-anchor="middle" letter-spacing="8" fill="#185FA5">INC</text>
+
+</svg>

@@ -30,13 +30,14 @@
       --c-text-secondary: #BBBBBB; /* 7:1 on black, replaces --gray for body text */
     }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; background: var(--c-bg); overflow-x: clip; }
 
     body {
       background: var(--c-bg);
       color: var(--c-accent);
       font-family: 'Courier New', Courier, monospace;
       overflow-x: hidden;
+      width: 100%;
     }
 
     /* Restore cursor for keyboard/touch users; custom cursor layered on top for mouse */
@@ -1012,8 +1013,48 @@
     }
 
     @media (max-width: 480px) {
+      section { padding: 4rem 1.25rem; }
       .footer-inner { grid-template-columns: 1fr; }
       .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+
+      /* Product name — prevent long domain words from blowing out the viewport */
+      .product-name {
+        font-size: clamp(1.8rem, 7vw, 3rem);
+        overflow-wrap: break-word;
+        word-break: break-word;
+      }
+
+      /* Section label — allow wrapping and tighten letter-spacing */
+      .section-label {
+        white-space: normal;
+        letter-spacing: 0.2em;
+        flex-wrap: wrap;
+      }
+
+      /* Product tagline (same pattern as section-label) */
+      .product-tagline {
+        white-space: normal;
+        letter-spacing: 0.15em;
+      }
+
+      /* Stats grid — 2 columns on narrow mobile */
+      .product-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      /* Investor numbers grid — 2 columns already set at 768px; keep it */
+
+      /* Body/desc text — prevent overflow on any long word */
+      p, .product-desc, .about-text p, .section-desc, .feature-desc,
+      .press-quote, .exec-bio, .footer-brand-desc, .disclaimer {
+        overflow-wrap: break-word;
+        word-break: break-word;
+      }
+    }
+
+    @media (max-width: 360px) {
+      /* Single-column stats on very small devices */
+      .product-stats { grid-template-columns: 1fr; }
     }
 
     /* ===== NO-JS FALLBACK ===== */
